@@ -55,6 +55,7 @@ class Game extends React.Component {
         coordinate: null,
       }],
       xIsNext: true,
+      sortOrder: true,
       stepNumber: 0,
     };
   }
@@ -87,13 +88,9 @@ class Game extends React.Component {
     });
   }
 
-  render() {
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
-
+  createMovesList(history) {
     const moves = history.map((step, move) => {
-      const desc = move ?
+      const description = move ?
         'Go to move ' + step.coordinate :
         'Go to game start';
       return (
@@ -101,18 +98,38 @@ class Game extends React.Component {
           <button
             onClick={() => this.jumpTo(move)}
           >
-            {desc}
+            {description}
           </button>
         </li>
       );
     });
+    return this.state.sortOrder ? moves : moves.reverse();
+  }
 
-    let status;
+  toggleSortOrder() {
+    let label = this.state.sortOrder ? "Ascending" : "Descending";
+    return (
+      <button onClick={() => this.setState({sortOrder: !this.state.sortOrder,})}>
+        {label}
+      </button>
+    );
+  }
+
+  stringStatus(winner) {
     if (winner) {
-      status = 'Winner ' + winner;
+      return 'Winner ' + winner;
     } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      return 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
+  }
+  
+  render() {
+    const history = this.state.history;
+    const current = history[this.state.stepNumber];
+    const winner = calculateWinner(current.squares);
+    const status = this.stringStatus(winner);
+    const sort = this.toggleSortOrder();
+    const moves = this.createMovesList(history);
     return (
       <div className="game">
         <div className="game-board">
@@ -123,6 +140,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <div className="sort-button">Sort Order: {sort}</div>
           <ol>{moves}</ol>
         </div>
       </div>
