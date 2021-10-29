@@ -36,8 +36,20 @@ button:hover{
   width: 34px;
 }
 
+.square-enter {
+  background: rgb(129, 129, 129);
+}
+
+.square-exit {
+  background: #fff;
+}
+
 .square:focus {
   outline: none;
+}
+
+.square-win {
+  background: rgb(0, 255, 0);
 }
 
 .kbd-navigation .square:focus {

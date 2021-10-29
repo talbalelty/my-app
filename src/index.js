@@ -5,6 +5,7 @@ import './index.css';
 function Square(props) {
   return (
     <button
+      id={"square" + props.id}
       className="square"
       onClick={props.onClick}
     >
@@ -17,6 +18,8 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+        key={i}
+        id={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -31,7 +34,7 @@ class Board extends React.Component {
       for (let j = 0; j < arraySize; j++) {
         col.push(this.renderSquare(i * arraySize + j));
       }
-      rows.push(<div className="board-row"> {col} </div>);
+      rows.push(<div key={"row" + i} className="board-row"> {col} </div>);
     }
     return rows;
   }
@@ -95,9 +98,7 @@ class Game extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          <button
-            onClick={() => this.jumpTo(move)}
-          >
+          <button onClick={() => this.jumpTo(move)}>
             {description}
           </button>
         </li>
@@ -109,7 +110,7 @@ class Game extends React.Component {
   toggleSortOrder() {
     let label = this.state.sortOrder ? "Ascending" : "Descending";
     return (
-      <button onClick={() => this.setState({sortOrder: !this.state.sortOrder,})}>
+      <button onClick={() => this.setState({ sortOrder: !this.state.sortOrder, })}>
         {label}
       </button>
     );
@@ -122,7 +123,7 @@ class Game extends React.Component {
       return 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
   }
-  
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -162,6 +163,9 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      for (const num of [a, b, c]) {
+        document.getElementById("square" + num).classList.add("square-win");
+      }
       return squares[a];
     }
   }
