@@ -2,6 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "Launch main",
+      "request": "launch",
+      "mainClass": "main",
+      "projectName": "my-app_a5e9bd4"
+    },
+    {
       "command": "npm start",
       "name": "Run npm start",
       "request": "launch",
